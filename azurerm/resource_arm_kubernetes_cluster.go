@@ -233,6 +233,13 @@ func resourceArmKubernetesCluster() *schema.Resource {
 							Required:     true,
 							Sensitive:    true,
 							ValidateFunc: validate.NoEmptyStrings,
+							DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+								if old == "" {
+									return true
+								}
+
+								return false
+							},
 						},
 					},
 				},
@@ -1453,9 +1460,11 @@ func flattenAzureRmKubernetesClusterServicePrincipalProfile(profile *containerse
 	}
 
 	// client secret isn't returned by the API so pass the existing value along
+	clientSecret := ""
 	if v, ok := d.GetOk("service_principal.0.client_secret"); ok {
-		values["client_secret"] = v.(string)
+		clientSecret = v.(string)
 	}
+	values["client_secret"] = clientSecret
 
 	return []interface{}{values}
 }
