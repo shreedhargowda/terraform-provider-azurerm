@@ -19,5 +19,5 @@ package features
 // Operators wishing to beta-test these resources can opt-into them in 1.x versions of the
 // Azure Provider by setting the Environment Variable 'ARM_PROVIDER_TWOPOINTZERO_RESOURCES' to 'true'
 func SupportsTwoPointZeroResources() bool {
-	return true
+	return strings.EqualFold(os.Getenv("ARM_PROVIDER_TWOPOINTZERO_RESOURCES"), "true")
 }
